@@ -2,11 +2,13 @@
     Function: fn_cleanupCivilians
 
     Description:
-        Removes civilian units and vehicles that are outside the despawn radius.
+        Removes civilian units and vehicles that are outside the despawn radius from all players.
         This prevents server lag by cleaning up distant civilians.
+        Note: Checks distance from all players (not just squad leaders) to ensure
+        civilians remain visible to any player within range.
 
     Parameters:
-        None (checks all players and their spawned civilians)
+        None (checks all players and despawns civilians out of range)
 
     Returns:
         Number of units/vehicles cleaned up
