@@ -16,6 +16,7 @@ params ["_player"];
 
 private _spawnedVehicles = [];
 private _playerPos = getPosATL _player;
+private _allPlayers = allPlayers; // Get all players for LOS check
 
 // Calculate how many vehicles to spawn
 private _numVehicles = floor (CIV_MIN_VEHICLES + random (CIV_MAX_VEHICLES - CIV_MIN_VEHICLES));
@@ -33,16 +34,29 @@ for "_i" from 1 to _numVehicles do {
     private _spawnPos = [];
 
     if (count _nearRoads > 0) then {
-        // Spawn on a random nearby road
-        private _road = selectRandom _nearRoads;
-        _spawnPos = getPosATL _road;
+        // Filter roads to exclude those too close to the player
+        private _validRoads = _nearRoads select {(_x distance _playerPos) >= CIV_MIN_SPAWN_DISTANCE};
+
+        if (count _validRoads > 0) then {
+            // Spawn on a random nearby road (not too close)
+            private _road = selectRandom _validRoads;
+            _spawnPos = getPosATL _road;
+        } else {
+            // All roads are too close, find a safe position instead
+            _spawnPos = [_playerPos, CIV_MIN_SPAWN_DISTANCE, CIV_SPAWN_RADIUS, 5, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
+        };
     } else {
         // No roads nearby, find a safe position
-        _spawnPos = [_playerPos, 50, CIV_SPAWN_RADIUS, 5, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
+        _spawnPos = [_playerPos, CIV_MIN_SPAWN_DISTANCE, CIV_SPAWN_RADIUS, 5, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
     };
 
     // Ensure spawn position is valid
     if (_spawnPos isEqualTo [0,0,0]) then { continue; };
+
+    // Check if spawn position is visible to any player (LOS check)
+    // Returns true if visible (block spawn), false if not visible (allow spawn)
+    private _isVisible = [_spawnPos, _allPlayers] call CIV_fnc_checkSpawnLOS;
+    if (_isVisible) then { continue; }; // Skip this spawn if players can see it
 
     // Select random vehicle class
     private _vehClass = selectRandom CIV_VEHICLE_CLASSES;
