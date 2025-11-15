@@ -14,25 +14,20 @@ A dynamic civilian population system for Arma 3 that spawns pedestrians and vehi
 
 ## Installation
 
-### Option 1: In Your Mission
+### Quick Start
 
-1. Copy the entire `Arma-3-Civilian-Population-Script` folder to your mission directory
+1. Copy the `CivilianPopulation` folder to your mission directory
 2. Add this line to your mission's `init.sqf`:
    ```sqf
-   execVM "Arma-3-Civilian-Population-Script\init.sqf";
+   execVM "CivilianPopulation\init.sqf";
    ```
+3. (Optional) Edit `CivilianPopulation\config.sqf` to customize settings
 
-### Option 2: As a Module
-
-1. Place the script folder in your mission
-2. Create a trigger or script that calls:
-   ```sqf
-   execVM "Arma-3-Civilian-Population-Script\init.sqf";
-   ```
+That's it! The script will automatically start spawning civilians when the mission begins.
 
 ## Configuration
 
-Edit `config.sqf` to customize the civilian population system:
+Edit `CivilianPopulation\config.sqf` to customize the civilian population system:
 
 ### General Settings
 ```sqf
@@ -65,15 +60,19 @@ CIV_DEBUG_MARKERS = true;      // Show debug markers
 ## File Structure
 
 ```
-Arma-3-Civilian-Population-Script/
-├── init.sqf                      # Main initialization script
-├── config.sqf                    # Configuration file
-├── fn_spawnCivilians.sqf        # Civilian spawning logic
-├── fn_spawnVehicles.sqf         # Vehicle spawning logic
-├── fn_addWaypoints.sqf          # Pedestrian waypoint system
-├── fn_addVehicleWaypoints.sqf   # Vehicle waypoint system
-├── fn_cleanupCivilians.sqf      # Despawn/cleanup logic
-└── README.md                     # This file
+YourMission.Map/
+├── mission.sqm
+├── init.sqf                      # Your mission's init file
+├── README.md                     # Project documentation
+├── LICENSE                       # MIT License
+└── CivilianPopulation/          # Civilian population script folder
+    ├── init.sqf                 # Main initialization script
+    ├── config.sqf               # Configuration file
+    ├── fn_spawnCivilians.sqf    # Civilian spawning logic
+    ├── fn_spawnVehicles.sqf     # Vehicle spawning logic
+    ├── fn_addWaypoints.sqf      # Pedestrian waypoint system
+    ├── fn_addVehicleWaypoints.sqf # Vehicle waypoint system
+    └── fn_cleanupCivilians.sqf  # Despawn/cleanup logic
 ```
 
 ## How It Works

@@ -7,9 +7,9 @@
         to prevent server lag.
 
     Usage:
-        1. Place this script folder in your mission directory
+        1. Place the CivilianPopulation folder in your mission directory
         2. Add the following to your mission's init.sqf:
-           execVM "Arma-3-Civilian-Population-Script\init.sqf";
+           execVM "CivilianPopulation\init.sqf";
         3. Adjust settings in config.sqf as needed
 
     Features:
@@ -26,8 +26,11 @@
 // Wait for mission to start
 if (!isServer) exitWith {};
 
+// Get script directory for relative paths
+private _scriptDir = str([] call {_thisScript}) select [0, count(str([] call {_thisScript})) - 8];
+
 // Load configuration
-call compile preprocessFileLineNumbers "Arma-3-Civilian-Population-Script\config.sqf";
+call compile preprocessFileLineNumbers (_scriptDir + "config.sqf");
 
 // Initialize global variables
 if (isNil "CIV_active") then {
@@ -37,11 +40,11 @@ if (isNil "CIV_active") then {
 };
 
 // Compile functions
-CIV_fnc_spawnCivilians = compile preprocessFileLineNumbers "Arma-3-Civilian-Population-Script\fn_spawnCivilians.sqf";
-CIV_fnc_spawnVehicles = compile preprocessFileLineNumbers "Arma-3-Civilian-Population-Script\fn_spawnVehicles.sqf";
-CIV_fnc_addWaypoints = compile preprocessFileLineNumbers "Arma-3-Civilian-Population-Script\fn_addWaypoints.sqf";
-CIV_fnc_addVehicleWaypoints = compile preprocessFileLineNumbers "Arma-3-Civilian-Population-Script\fn_addVehicleWaypoints.sqf";
-CIV_fnc_cleanupCivilians = compile preprocessFileLineNumbers "Arma-3-Civilian-Population-Script\fn_cleanupCivilians.sqf";
+CIV_fnc_spawnCivilians = compile preprocessFileLineNumbers (_scriptDir + "fn_spawnCivilians.sqf");
+CIV_fnc_spawnVehicles = compile preprocessFileLineNumbers (_scriptDir + "fn_spawnVehicles.sqf");
+CIV_fnc_addWaypoints = compile preprocessFileLineNumbers (_scriptDir + "fn_addWaypoints.sqf");
+CIV_fnc_addVehicleWaypoints = compile preprocessFileLineNumbers (_scriptDir + "fn_addVehicleWaypoints.sqf");
+CIV_fnc_cleanupCivilians = compile preprocessFileLineNumbers (_scriptDir + "fn_cleanupCivilians.sqf");
 
 // Initialization message
 diag_log "==========================================================";
