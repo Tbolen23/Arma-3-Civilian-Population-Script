@@ -6,13 +6,13 @@
 */
 
 // ===== GENERAL SETTINGS =====
-CIV_SPAWN_RADIUS = 300;              // Radius around players where civilians spawn (meters)
+CIV_SPAWN_RADIUS = 300;              // Radius around squads where civilians spawn (meters)
 CIV_DESPAWN_RADIUS = 350;            // Radius at which civilians despawn (meters)
 CIV_UPDATE_INTERVAL = 10;            // How often to check spawn/despawn (seconds)
 
 // ===== CIVILIAN SETTINGS =====
-CIV_MIN_CIVILIANS = 5;               // Minimum number of civilians per player
-CIV_MAX_CIVILIANS = 15;              // Maximum number of civilians per player
+CIV_MIN_CIVILIANS = 5;               // Minimum number of civilians per squad
+CIV_MAX_CIVILIANS = 15;              // Maximum number of civilians per squad
 CIV_SPAWN_CHANCE = 0.7;              // Chance (0-1) that a civilian will spawn each check
 CIV_WAYPOINT_RADIUS = 150;           // How far civilians will walk from spawn point
 CIV_WAYPOINT_COUNT = 3;              // Number of waypoints per civilian
@@ -39,8 +39,8 @@ CIV_UNIT_CLASSES = [
 ];
 
 // ===== VEHICLE SETTINGS =====
-CIV_MIN_VEHICLES = 2;                // Minimum number of vehicles per player
-CIV_MAX_VEHICLES = 6;                // Maximum number of vehicles per player
+CIV_MIN_VEHICLES = 2;                // Minimum number of vehicles per squad
+CIV_MAX_VEHICLES = 6;                // Maximum number of vehicles per squad
 CIV_VEHICLE_SPAWN_CHANCE = 0.5;      // Chance (0-1) that a vehicle will spawn each check
 CIV_VEHICLE_SPEED_LIMIT = 50;        // Speed limit for civilian vehicles (km/h)
 

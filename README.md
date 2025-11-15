@@ -1,15 +1,15 @@
 # Arma 3 Urban Civilian Population Script
 
-A dynamic civilian population system for Arma 3 that spawns pedestrians and vehicles around players in urban environments. Perfect for creating realistic city atmospheres with a mix of civilians and combatants.
+A dynamic civilian population system for Arma 3 that spawns pedestrians and vehicles around player squads in urban environments. Perfect for creating realistic city atmospheres with a mix of civilians and combatants.
 
 ## Features
 
-- **Dynamic Spawning**: Civilians and vehicles spawn within 300m radius of players
-- **Random Population**: Configurable random number of civilians (5-15) and vehicles (2-6) per player
+- **Squad-Based Spawning**: Civilians and vehicles spawn within 300m radius of each player squad
+- **Random Population**: Configurable random number of civilians (5-15) and vehicles (2-6) per squad
 - **Smart Patrolling**: Civilians walk randomly, vehicles drive on roads when available
 - **Automatic Cleanup**: Despawns civilians outside 350m radius to prevent server lag
 - **Fully Configurable**: Adjust all parameters in `config.sqf`
-- **Performance Optimized**: Regular cleanup cycles prevent entity buildup
+- **Performance Optimized**: Regular cleanup cycles prevent entity buildup, squad-based spawning reduces overhead
 - **CBA Compatible**: Uses CBA functions if available, falls back to vanilla if not
 
 ## Installation
@@ -31,22 +31,22 @@ Edit `CivilianPopulation\config.sqf` to customize the civilian population system
 
 ### General Settings
 ```sqf
-CIV_SPAWN_RADIUS = 300;        // Spawn radius around players (meters)
+CIV_SPAWN_RADIUS = 300;        // Spawn radius around squads (meters)
 CIV_DESPAWN_RADIUS = 350;      // Despawn radius (meters)
 CIV_UPDATE_INTERVAL = 10;      // Update frequency (seconds)
 ```
 
 ### Civilian Settings
 ```sqf
-CIV_MIN_CIVILIANS = 5;         // Minimum civilians per player
-CIV_MAX_CIVILIANS = 15;        // Maximum civilians per player
+CIV_MIN_CIVILIANS = 5;         // Minimum civilians per squad
+CIV_MAX_CIVILIANS = 15;        // Maximum civilians per squad
 CIV_SPAWN_CHANCE = 0.7;        // Spawn probability (0-1)
 ```
 
 ### Vehicle Settings
 ```sqf
-CIV_MIN_VEHICLES = 2;          // Minimum vehicles per player
-CIV_MAX_VEHICLES = 6;          // Maximum vehicles per player
+CIV_MIN_VEHICLES = 2;          // Minimum vehicles per squad
+CIV_MAX_VEHICLES = 6;          // Maximum vehicles per squad
 CIV_VEHICLE_SPAWN_CHANCE = 0.5; // Spawn probability (0-1)
 CIV_VEHICLE_SPEED_LIMIT = 50;  // Speed limit (km/h)
 ```
@@ -79,12 +79,15 @@ YourMission.Map/
 
 1. **Initialization**: The script loads configuration and compiles all functions
 2. **Spawn Loop**: Every 10 seconds (configurable), the script:
-   - Checks each player's position
-   - Counts nearby civilians and vehicles
+   - Identifies all player squads/groups
+   - Checks each squad leader's position
+   - Counts nearby civilians and vehicles for each squad
    - Spawns new ones if below minimum threshold
    - Assigns random patrol waypoints
-3. **Cleanup Loop**: Simultaneously removes civilians/vehicles beyond despawn radius
+3. **Cleanup Loop**: Simultaneously removes civilians/vehicles beyond despawn radius from any player
 4. **Mission End**: All spawned entities are cleaned up automatically
+
+**Squad System**: Civilians spawn around squad leaders (one set per squad), making it more performance-friendly than per-player spawning. Solo players count as a squad of one.
 
 ## Customization Examples
 
@@ -215,6 +218,12 @@ Created by tbolen23 for dynamic urban mission environments in Arma 3.
 Free to use and modify for any Arma 3 mission or mod. Attribution appreciated but not required.
 
 ## Version History
+
+### v1.1 (2025-11-15)
+- Changed to squad-based spawning system (spawns around squads instead of individual players)
+- Improved performance by reducing spawn calculations
+- Solo players automatically treated as a squad of one
+- Updated documentation to reflect squad-based system
 
 ### v1.0 (2025-11-15)
 - Initial release

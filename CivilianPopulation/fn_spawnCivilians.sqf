@@ -2,11 +2,11 @@
     Function: fn_spawnCivilians
 
     Description:
-        Spawns civilian units around a player within the spawn radius.
+        Spawns civilian units around a squad leader within the spawn radius.
         Civilians will randomly patrol the area and despawn when out of range.
 
     Parameters:
-        _player - The player object to spawn civilians around
+        _player - The squad leader object to spawn civilians around
 
     Returns:
         Array of spawned civilian units
@@ -21,7 +21,7 @@ private _playerPos = getPosATL _player;
 private _numCivs = floor (CIV_MIN_CIVILIANS + random (CIV_MAX_CIVILIANS - CIV_MIN_CIVILIANS));
 
 if (CIV_DEBUG_MODE) then {
-    systemChat format ["[CIV] Attempting to spawn %1 civilians around %2", _numCivs, name _player];
+    systemChat format ["[CIV] Attempting to spawn %1 civilians around squad leader %2", _numCivs, name _player];
 };
 
 for "_i" from 1 to _numCivs do {

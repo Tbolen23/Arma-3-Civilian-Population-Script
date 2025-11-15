@@ -2,11 +2,11 @@
     Function: fn_spawnVehicles
 
     Description:
-        Spawns civilian vehicles with drivers around a player within the spawn radius.
+        Spawns civilian vehicles with drivers around a squad leader within the spawn radius.
         Vehicles will drive around the area on roads when possible and despawn when out of range.
 
     Parameters:
-        _player - The player object to spawn vehicles around
+        _player - The squad leader object to spawn vehicles around
 
     Returns:
         Array of spawned civilian vehicles
@@ -21,7 +21,7 @@ private _playerPos = getPosATL _player;
 private _numVehicles = floor (CIV_MIN_VEHICLES + random (CIV_MAX_VEHICLES - CIV_MIN_VEHICLES));
 
 if (CIV_DEBUG_MODE) then {
-    systemChat format ["[CIV] Attempting to spawn %1 vehicles around %2", _numVehicles, name _player];
+    systemChat format ["[CIV] Attempting to spawn %1 vehicles around squad leader %2", _numVehicles, name _player];
 };
 
 for "_i" from 1 to _numVehicles do {

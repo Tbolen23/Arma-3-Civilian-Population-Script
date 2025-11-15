@@ -2,9 +2,9 @@
     Arma 3 Urban Civilian Population Script
 
     Description:
-        Dynamically spawns and manages civilian pedestrians and vehicles around players
+        Dynamically spawns and manages civilian pedestrians and vehicles around player squads
         in urban environments. Civilians spawn within 300m and despawn beyond that range
-        to prevent server lag.
+        to prevent server lag. Squad-based spawning improves performance.
 
     Usage:
         1. Place the CivilianPopulation folder in your mission directory
@@ -13,14 +13,14 @@
         3. Adjust settings in config.sqf as needed
 
     Features:
-        - Dynamic civilian spawning within 300m radius of players
-        - Random number of pedestrians and vehicles
+        - Squad-based civilian spawning within 300m radius
+        - Random number of pedestrians and vehicles per squad
         - Civilians patrol randomly around spawn area
         - Automatic despawning when out of range
         - Fully configurable via config.sqf
 
     Author: tbolen23
-    Version: 1.0
+    Version: 1.1
 */
 
 // Wait for mission to start
@@ -62,24 +62,37 @@ if (CIV_DEBUG_MODE) then {
     // Exit if script is disabled
     if (!CIV_active) exitWith {};
 
-    // Get all players
+    // Get all player groups
     private _allPlayers = allPlayers;
-
     if (count _allPlayers == 0) exitWith {};
 
-    // Process each player
+    private _playerGroups = [];
     {
-        private _player = _x;
+        private _group = group _x;
+        if (!(_group in _playerGroups)) then {
+            _playerGroups pushBack _group;
+        };
+    } forEach _allPlayers;
 
-        // Count existing civilians near this player
+    // Process each squad
+    {
+        private _squad = _x;
+        private _squadLeader = leader _squad;
+
+        // Skip if squad leader is null or dead
+        if (isNull _squadLeader || !alive _squadLeader) then { continue; };
+
+        private _squadPos = getPosATL _squadLeader;
+
+        // Count existing civilians near this squad
         private _nearCivs = allUnits select {
             (_x getVariable ["CIV_type", ""]) == "pedestrian" &&
-            (_x distance _player) < CIV_SPAWN_RADIUS
+            (_x distance _squadPos) < CIV_SPAWN_RADIUS
         };
 
         private _nearVehicles = vehicles select {
             (_x getVariable ["CIV_type", ""]) == "vehicle" &&
-            (_x distance _player) < CIV_SPAWN_RADIUS
+            (_x distance _squadPos) < CIV_SPAWN_RADIUS
         };
 
         private _currentCivCount = count _nearCivs;
@@ -87,17 +100,17 @@ if (CIV_DEBUG_MODE) then {
 
         // Spawn civilians if below minimum
         if (_currentCivCount < CIV_MIN_CIVILIANS) then {
-            private _spawned = [_player] call CIV_fnc_spawnCivilians;
+            private _spawned = [_squadLeader] call CIV_fnc_spawnCivilians;
             CIV_spawnedUnits append _spawned;
         };
 
         // Spawn vehicles if below minimum
         if (_currentVehCount < CIV_MIN_VEHICLES) then {
-            private _spawned = [_player] call CIV_fnc_spawnVehicles;
+            private _spawned = [_squadLeader] call CIV_fnc_spawnVehicles;
             CIV_spawnedVehicles append _spawned;
         };
 
-    } forEach _allPlayers;
+    } forEach _playerGroups;
 
     // Cleanup civilians that are out of range
     call CIV_fnc_cleanupCivilians;
@@ -108,23 +121,37 @@ if (CIV_DEBUG_MODE) then {
 if (isNil "CBA_fnc_addPerFrameHandler") then {
     [] spawn {
         while {CIV_active} do {
-            // Get all players
+            // Get all player groups
             private _allPlayers = allPlayers;
 
             if (count _allPlayers > 0) then {
-                // Process each player
+                private _playerGroups = [];
                 {
-                    private _player = _x;
+                    private _group = group _x;
+                    if (!(_group in _playerGroups)) then {
+                        _playerGroups pushBack _group;
+                    };
+                } forEach _allPlayers;
 
-                    // Count existing civilians near this player
+                // Process each squad
+                {
+                    private _squad = _x;
+                    private _squadLeader = leader _squad;
+
+                    // Skip if squad leader is null or dead
+                    if (isNull _squadLeader || !alive _squadLeader) then { continue; };
+
+                    private _squadPos = getPosATL _squadLeader;
+
+                    // Count existing civilians near this squad
                     private _nearCivs = allUnits select {
                         (_x getVariable ["CIV_type", ""]) == "pedestrian" &&
-                        (_x distance _player) < CIV_SPAWN_RADIUS
+                        (_x distance _squadPos) < CIV_SPAWN_RADIUS
                     };
 
                     private _nearVehicles = vehicles select {
                         (_x getVariable ["CIV_type", ""]) == "vehicle" &&
-                        (_x distance _player) < CIV_SPAWN_RADIUS
+                        (_x distance _squadPos) < CIV_SPAWN_RADIUS
                     };
 
                     private _currentCivCount = count _nearCivs;
@@ -132,17 +159,17 @@ if (isNil "CBA_fnc_addPerFrameHandler") then {
 
                     // Spawn civilians if below minimum
                     if (_currentCivCount < CIV_MIN_CIVILIANS) then {
-                        private _spawned = [_player] call CIV_fnc_spawnCivilians;
+                        private _spawned = [_squadLeader] call CIV_fnc_spawnCivilians;
                         CIV_spawnedUnits append _spawned;
                     };
 
                     // Spawn vehicles if below minimum
                     if (_currentVehCount < CIV_MIN_VEHICLES) then {
-                        private _spawned = [_player] call CIV_fnc_spawnVehicles;
+                        private _spawned = [_squadLeader] call CIV_fnc_spawnVehicles;
                         CIV_spawnedVehicles append _spawned;
                     };
 
-                } forEach _allPlayers;
+                } forEach _playerGroups;
 
                 // Cleanup civilians that are out of range
                 call CIV_fnc_cleanupCivilians;
