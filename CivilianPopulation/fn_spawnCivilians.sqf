@@ -28,8 +28,8 @@ for "_i" from 1 to _numCivs do {
     // Check spawn chance
     if (random 1 > CIV_SPAWN_CHANCE) then { continue; };
 
-    // Find a random position within spawn radius
-    private _spawnPos = [_playerPos, 50, CIV_SPAWN_RADIUS, 3, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
+    // Find a random position within spawn radius (minimum distance to prevent spawning on top of players)
+    private _spawnPos = [_playerPos, CIV_MIN_SPAWN_DISTANCE, CIV_SPAWN_RADIUS, 3, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
 
     // Ensure spawn position is valid
     if (_spawnPos isEqualTo [0,0,0]) then { continue; };

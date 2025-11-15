@@ -5,6 +5,7 @@ A dynamic civilian population system for Arma 3 that spawns pedestrians and vehi
 ## Features
 
 - **Squad-Based Spawning**: Civilians and vehicles spawn within 300m radius of each player squad
+- **Safe Distance Spawning**: Minimum 25m spawn distance prevents civilians from appearing right next to players
 - **Random Population**: Configurable random number of civilians (5-15) and vehicles (2-6) per squad
 - **Smart Patrolling**: Civilians walk randomly, vehicles drive on roads when available
 - **Automatic Cleanup**: Despawns civilians outside 350m radius to prevent server lag
@@ -32,6 +33,7 @@ Edit `CivilianPopulation\config.sqf` to customize the civilian population system
 ### General Settings
 ```sqf
 CIV_SPAWN_RADIUS = 300;        // Spawn radius around squads (meters)
+CIV_MIN_SPAWN_DISTANCE = 25;   // Minimum spawn distance from players (meters)
 CIV_DESPAWN_RADIUS = 350;      // Despawn radius (meters)
 CIV_UPDATE_INTERVAL = 10;      // Update frequency (seconds)
 ```

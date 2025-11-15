@@ -7,6 +7,7 @@
 
 // ===== GENERAL SETTINGS =====
 CIV_SPAWN_RADIUS = 300;              // Radius around squads where civilians spawn (meters)
+CIV_MIN_SPAWN_DISTANCE = 25;         // Minimum distance from players to spawn civilians (meters)
 CIV_DESPAWN_RADIUS = 350;            // Radius at which civilians despawn (meters)
 CIV_UPDATE_INTERVAL = 10;            // How often to check spawn/despawn (seconds)
 

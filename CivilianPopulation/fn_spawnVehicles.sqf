@@ -33,12 +33,20 @@ for "_i" from 1 to _numVehicles do {
     private _spawnPos = [];
 
     if (count _nearRoads > 0) then {
-        // Spawn on a random nearby road
-        private _road = selectRandom _nearRoads;
-        _spawnPos = getPosATL _road;
+        // Filter roads to exclude those too close to the player
+        private _validRoads = _nearRoads select {(_x distance _playerPos) >= CIV_MIN_SPAWN_DISTANCE};
+
+        if (count _validRoads > 0) then {
+            // Spawn on a random nearby road (not too close)
+            private _road = selectRandom _validRoads;
+            _spawnPos = getPosATL _road;
+        } else {
+            // All roads are too close, find a safe position instead
+            _spawnPos = [_playerPos, CIV_MIN_SPAWN_DISTANCE, CIV_SPAWN_RADIUS, 5, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
+        };
     } else {
         // No roads nearby, find a safe position
-        _spawnPos = [_playerPos, 50, CIV_SPAWN_RADIUS, 5, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
+        _spawnPos = [_playerPos, CIV_MIN_SPAWN_DISTANCE, CIV_SPAWN_RADIUS, 5, 0, 0.3, 0, [], [_playerPos, _playerPos]] call BIS_fnc_findSafePos;
     };
 
     // Ensure spawn position is valid
