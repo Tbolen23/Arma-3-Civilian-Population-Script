@@ -16,6 +16,7 @@ params ["_player"];
 
 private _spawnedUnits = [];
 private _playerPos = getPosATL _player;
+private _allPlayers = allPlayers; // Get all players for LOS check
 
 // Calculate how many civilians to spawn
 private _numCivs = floor (CIV_MIN_CIVILIANS + random (CIV_MAX_CIVILIANS - CIV_MIN_CIVILIANS));
@@ -33,6 +34,11 @@ for "_i" from 1 to _numCivs do {
 
     // Ensure spawn position is valid
     if (_spawnPos isEqualTo [0,0,0]) then { continue; };
+
+    // Check if spawn position is visible to any player (LOS check)
+    // Returns true if visible (block spawn), false if not visible (allow spawn)
+    private _isVisible = [_spawnPos, _allPlayers] call CIV_fnc_checkSpawnLOS;
+    if (_isVisible) then { continue; }; // Skip this spawn if players can see it
 
     // Create civilian group
     private _civGroup = createGroup civilian;

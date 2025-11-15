@@ -11,6 +11,10 @@ CIV_MIN_SPAWN_DISTANCE = 25;         // Minimum distance from players to spawn c
 CIV_DESPAWN_RADIUS = 350;            // Radius at which civilians despawn (meters)
 CIV_UPDATE_INTERVAL = 10;            // How often to check spawn/despawn (seconds)
 
+// ===== LINE OF SIGHT SETTINGS =====
+CIV_ENABLE_LOS_CHECK = true;         // Prevent spawning in player's line of sight (slight performance cost)
+CIV_FOV_ANGLE = 120;                 // Field of view angle in degrees (120 = human peripheral vision)
+
 // ===== CIVILIAN SETTINGS =====
 CIV_MIN_CIVILIANS = 5;               // Minimum number of civilians per squad
 CIV_MAX_CIVILIANS = 15;              // Maximum number of civilians per squad

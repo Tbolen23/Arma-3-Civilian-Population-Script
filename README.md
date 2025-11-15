@@ -6,6 +6,7 @@ A dynamic civilian population system for Arma 3 that spawns pedestrians and vehi
 
 - **Squad-Based Spawning**: Civilians and vehicles spawn within 300m radius of each player squad
 - **Safe Distance Spawning**: Minimum 25m spawn distance prevents civilians from appearing right next to players
+- **Line of Sight Check**: Hybrid FOV/LOS system prevents civilians spawning in player's view (optional, minimal performance cost)
 - **Random Population**: Configurable random number of civilians (5-15) and vehicles (2-6) per squad
 - **Smart Patrolling**: Civilians walk randomly, vehicles drive on roads when available
 - **Automatic Cleanup**: Despawns civilians outside 350m radius to prevent server lag
@@ -36,6 +37,12 @@ CIV_SPAWN_RADIUS = 300;        // Spawn radius around squads (meters)
 CIV_MIN_SPAWN_DISTANCE = 25;   // Minimum spawn distance from players (meters)
 CIV_DESPAWN_RADIUS = 350;      // Despawn radius (meters)
 CIV_UPDATE_INTERVAL = 10;      // Update frequency (seconds)
+```
+
+### Line of Sight Settings
+```sqf
+CIV_ENABLE_LOS_CHECK = true;   // Prevent spawning in player's view (slight performance cost)
+CIV_FOV_ANGLE = 120;           // Field of view angle (120 = peripheral vision)
 ```
 
 ### Civilian Settings
@@ -74,6 +81,7 @@ YourMission.Map/
     ├── fn_spawnVehicles.sqf     # Vehicle spawning logic
     ├── fn_addWaypoints.sqf      # Pedestrian waypoint system
     ├── fn_addVehicleWaypoints.sqf # Vehicle waypoint system
+    ├── fn_checkSpawnLOS.sqf     # Line of sight check system
     └── fn_cleanupCivilians.sqf  # Despawn/cleanup logic
 ```
 

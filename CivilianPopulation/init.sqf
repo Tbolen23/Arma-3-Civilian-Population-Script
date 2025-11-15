@@ -45,6 +45,7 @@ CIV_fnc_spawnVehicles = compile preprocessFileLineNumbers (_scriptDir + "fn_spaw
 CIV_fnc_addWaypoints = compile preprocessFileLineNumbers (_scriptDir + "fn_addWaypoints.sqf");
 CIV_fnc_addVehicleWaypoints = compile preprocessFileLineNumbers (_scriptDir + "fn_addVehicleWaypoints.sqf");
 CIV_fnc_cleanupCivilians = compile preprocessFileLineNumbers (_scriptDir + "fn_cleanupCivilians.sqf");
+CIV_fnc_checkSpawnLOS = compile preprocessFileLineNumbers (_scriptDir + "fn_checkSpawnLOS.sqf");
 
 // Initialization message
 diag_log "==========================================================";

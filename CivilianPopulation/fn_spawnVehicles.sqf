@@ -16,6 +16,7 @@ params ["_player"];
 
 private _spawnedVehicles = [];
 private _playerPos = getPosATL _player;
+private _allPlayers = allPlayers; // Get all players for LOS check
 
 // Calculate how many vehicles to spawn
 private _numVehicles = floor (CIV_MIN_VEHICLES + random (CIV_MAX_VEHICLES - CIV_MIN_VEHICLES));
@@ -51,6 +52,11 @@ for "_i" from 1 to _numVehicles do {
 
     // Ensure spawn position is valid
     if (_spawnPos isEqualTo [0,0,0]) then { continue; };
+
+    // Check if spawn position is visible to any player (LOS check)
+    // Returns true if visible (block spawn), false if not visible (allow spawn)
+    private _isVisible = [_spawnPos, _allPlayers] call CIV_fnc_checkSpawnLOS;
+    if (_isVisible) then { continue; }; // Skip this spawn if players can see it
 
     // Select random vehicle class
     private _vehClass = selectRandom CIV_VEHICLE_CLASSES;
